@@ -1,5 +1,5 @@
 {
-  "name": "react-nuanced",
+  "name": "react-nuance",
   "version": "1.0.0",
   "description": "An expermimental simple state management solution for react inspired from zustand",
   "main": "dist/index.js",

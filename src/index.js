@@ -1,1 +1,1 @@
-export * from './reactNuanced';
+export * from './reactNuance';
