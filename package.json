@@ -4,10 +4,13 @@
   "description": "An expermimental simple state management solution for react inspired from zustand",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
-  
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ash-ketchem/React-Nuanced.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-lib" : "rollup -c"
+    "build-lib": "rollup -c"
   },
   "author": "Sangeeth P George",
   "license": "MIT",
