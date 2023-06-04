@@ -1,6 +1,12 @@
-# React-Nuanced
+# React-Nuance
 
-An expermimental simple state management solution for react inspired from zustand
+An expermimental simple small state management solution for react inspired from zustand
+
+# Installation
+
+```bash
+npm i react-nuance
+```
 
 ## Create a store and set functions
 
@@ -253,3 +259,7 @@ export default PostItem;
 - KEYS ARE NOT REQUIRED FOR SETTER FUNCTIONS IN THE STORE BECAUSE THERE IS NO NEED TO TRACK THEM
 
 * TRYING TO RETURN AN ARRAY/OBJECT OF DERIVED STATES FROM THE SELECTOR FUNCTION OF THE STORE WILL RESULT IN INFINTRE RE-RENDER
+
+## For more examples check the github repo
+
+https://github.com/Ash-ketchem/React-Nuanced.git
