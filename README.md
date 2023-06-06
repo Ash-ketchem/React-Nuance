@@ -261,5 +261,4 @@ export default PostItem;
 * TRYING TO RETURN AN ARRAY/OBJECT OF DERIVED STATES FROM THE SELECTOR FUNCTION OF THE STORE WILL RESULT IN INFINTRE RE-RENDER
 
 ## For more examples check the github repo
-
-https://github.com/Ash-ketchem/React-Nuanced.git
+https://github.com/Ash-ketchem/React-nuance-examples
