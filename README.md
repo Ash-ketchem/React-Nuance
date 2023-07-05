@@ -2,7 +2,7 @@
 
 An expermimental simple small state management solution for react inspired from zustand
 
-version 3
+### version 3
 
 # Installation
 
