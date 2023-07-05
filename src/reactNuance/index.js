@@ -6,71 +6,42 @@ export const create = (createStore) => {
   const subscribers = new Map();
 
   const subscribe = (key, callback) => {
-    let callbacks = null;
-    try {
-      if (!key) return;
-
-      callbacks = subscribers.get(key);
-
-      if (!callbacks) {
-        callbacks = new Set();
-        subscribers.set(key, callbacks);
-      }
-
-      callbacks.add(callback);
-    } catch (error) {
-      console.log("error has occured in the subscription function", error);
-    } finally {
-      return () => {
-        if (callbacks) {
-          callbacks.delete(callback);
-          if (callbacks.size === 0) {
-            subscribers.delete(key);
-          }
-        }
-      };
+    if (key && subscribers.has(key)) {
+      // a valid key cannot be rewritten (used for tracking state)
+      //undefined keys can be overwritten (used for setter functions)
+      throw new Error("cannot have two states with same key");
     }
+    subscribers.set(key, callback);
+    return () => {
+      subscribers.delete(key);
+    };
   };
-
   const set = (setter, key = null) => {
-    try {
-      globalStore = { ...globalStore, ...setter(globalStore) };
+    globalStore = { ...globalStore, ...setter(globalStore) };
 
-      if (!key) {
-        subscribers.forEach((callbacks) =>
-          callbacks.forEach((callback) => callback())
-        );
-        return;
-      }
-
+    if (key) {
       if (Array.isArray(key)) {
-        key.forEach((k) =>
-          subscribers.get(k)?.forEach((callback) => callback())
-        );
+        key.forEach((k) => subscribers.has(k) && subscribers.get(k)());
       } else {
-        subscribers.get(key)?.forEach((callback) => callback());
+        subscribers.has(key) && subscribers.get(key)();
       }
-    } catch (error) {
-      console.log("error has occured in the set function", error);
+    } else {
+      subscribers.forEach((value, key, map) => value());
     }
   };
-
   globalStore = createStore(set);
 
   const get = () => globalStore;
 
   return (selector, key, serverSnapshot = null) => {
-    if (!selector) {
-      throw new Error("invalid selector");
-    }
-
     if (typeof selector === "function") {
-      if (!key && typeof selector(get()) !== "function") {
-        // generate a random unique key
-        while (true) {
-          key = crypto.randomUUID();
-          if (!subscribers.has(key)) {
-            break;
+      if (!key) {
+        if (typeof selector(get()) !== "function") {
+          while (true) {
+            key = crypto.randomUUID();
+            if (!subscribers.has(key)) {
+              break;
+            }
           }
         }
       }
@@ -78,7 +49,7 @@ export const create = (createStore) => {
       const state = useSyncExternalStore(
         (callback) => subscribe(key, callback),
         () => selector(get()),
-        () => serverSnapshot ?? selector(get())
+        () => (serverSnapshot ? serverSnapshot : selector(get()))
       );
 
       return state;
@@ -87,7 +58,7 @@ export const create = (createStore) => {
         useSyncExternalStore(
           (callback) => subscribe(key, callback),
           () => get()[s],
-          () => serverSnapshot ?? get()[s]
+          () => (serverSnapshot ? serverSnapshot : get()[s])
         )
       );
     } else {
