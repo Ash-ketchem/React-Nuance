@@ -1,6 +1,6 @@
 {
   "name": "react-nuance",
-  "version": "3.1.0",
+  "version": "3.2.0-0",
   "description": "An expermimental simple state management solution for react inspired from zustand",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
