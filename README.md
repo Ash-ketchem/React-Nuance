@@ -253,13 +253,89 @@ const PostItem = ({ id }) => {
 export default PostItem;
 ```
 
+## SHARING STATE
+
+From version 3.0 you can share the state between components using the same key for both states
+
+```jsx
+const component1 = () => {
+  const key = "myKey";
+  const username = someStore((state) => state.user.name, key);
+
+  return <></>;
+};
+
+const component2 = () => {
+  const key = "myKey";
+  const username = someStore((state) => state.user.name, key);
+
+  return <></>;
+};
+```
+
+These two componenets will share the same state as same key is used to select the state from the store
+
+## GROUPING STATES
+
+From version 3.0 states can be grouped using an array of keys
+
+```jsx
+const GroupReactivity = () => {
+  const groupKey = "user_name";
+  const prefixes = ["01_", "02_"];
+  const keySet = prefixes.map((prefix) => prefix + groupKey);
+
+  return (
+    <div>
+      {prefixes.map((prefix) => (
+        <GroupStateShareComponent
+          keySet={keySet}
+          key={prefix + groupKey}
+          Key={prefix + groupKey} //unique key for each component
+        />
+      ))}
+    </div>
+  );
+};
+```
+
+An array of keys is used here for state update on multiple components
+
+```jsx
+const GroupStateShareComponent = ({ keySet, Key }) => {
+  const userName = someStore((state) => state.user.name, Key);
+  const setUserName = someStore((state) => state.setUserName);
+
+  return (
+    <div>
+      <div>
+        <h4>{userName}</h4>
+        <button
+          onClick={() => {
+            setUserName(userName === "ash" ? "sam" : "ash", keySet);
+            // set function is called with an array of keys instead of a single key
+          }}
+        >
+          change name
+        </button>
+      </div>
+    </div>
+  );
+};
+```
+
+## changes from v3.0
+
+- setter functions are not stored in subscribers list
+- existing state can be shared
+- Groups of state can be created
+
 ## WHAT NOT TO DO
 
-- DON'T GIVE SAME KEYS TO DIFFERENT STATES/DERIVED STATES
-- DON'T CALL SET FUNCTIONS WITH "UNDEFINED" AS KEY
 - KEYS ARE NOT REQUIRED FOR SETTER FUNCTIONS IN THE STORE BECAUSE THERE IS NO NEED TO TRACK THEM
 
 * TRYING TO RETURN AN ARRAY/OBJECT OF DERIVED STATES FROM THE SELECTOR FUNCTION OF THE STORE WILL RESULT IN INFINTRE RE-RENDER
 
 ## For more examples check the github repo
+
 https://github.com/Ash-ketchem/React-nuance-examples
