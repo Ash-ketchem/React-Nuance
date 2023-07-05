@@ -1,6 +1,7 @@
 # React-Nuance
 
 An expermimental simple small state management solution for react inspired from zustand
+version 2
 
 # Installation
 
